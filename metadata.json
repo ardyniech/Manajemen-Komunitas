@@ -1,0 +1,6 @@
+{
+  "name": "Manajemen Komunitas",
+  "description": "Sistem manajemen komunitas modern untuk keanggotaan, iuran kas, forum diskusi, analitik, dan pelaporan otomatis.",
+  "requestFramePermissions": ["notifications"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

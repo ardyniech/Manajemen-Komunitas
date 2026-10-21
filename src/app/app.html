@@ -1,0 +1,101 @@
+@if (!isAuth()) {
+  <app-landing-auth (authenticated)="isAuth.set(true)" />
+} @else {
+  <div class="min-h-screen bg-slate-50 flex flex-col lg:flex-row antialiased max-w-full overflow-x-hidden">
+    <!-- Desktop Sidebar with Tree Navigation -->
+    <div class="hidden lg:block shrink-0 w-64 h-screen sticky top-0">
+      <app-sidebar [activeTab]="activePage()" (selectTab)="switchTab($event)" />
+    </div>
+
+    <!-- Mobile Drawer & Backdrop with Smooth Transitions -->
+    <div
+      class="fixed inset-0 z-50 lg:hidden transition-all duration-300"
+      [class.opacity-100]="isMobileNavOpen()"
+      [class.pointer-events-auto]="isMobileNavOpen()"
+      [class.opacity-0]="!isMobileNavOpen()"
+      [class.pointer-events-none]="!isMobileNavOpen()"
+      role="dialog"
+      aria-modal="true"
+      tabindex="-1"
+      (keydown.escape)="isMobileNavOpen.set(false)"
+    >
+      <button
+        type="button"
+        aria-label="Tutup bilah samping"
+        class="absolute inset-0 bg-slate-900/50 backdrop-blur-xs transition-opacity duration-300 w-full h-full border-none cursor-default"
+        (click)="isMobileNavOpen.set(false)"
+      ></button>
+
+      <div
+        class="relative w-72 max-w-[82vw] bg-white h-full shadow-2xl transition-transform duration-300 ease-out z-10"
+        [class.translate-x-0]="isMobileNavOpen()"
+        [class.-translate-x-full]="!isMobileNavOpen()"
+      >
+        <app-sidebar [activeTab]="activePage()" (selectTab)="switchTab($event)" (closeNav)="isMobileNavOpen.set(false)" />
+      </div>
+    </div>
+
+    <!-- Main Content Stage -->
+    <div class="flex-1 flex flex-col min-w-0 max-w-full pb-16 lg:pb-0">
+      <app-header [currentTitle]="pageTitle()" (toggleMobileNav)="isMobileNavOpen.set(true)" (toggleNotification)="isNotificationOpen.set(true)" (openProfile)="switchTab('profile')" />
+
+      <main class="flex-1 p-3 sm:p-5 md:p-6 lg:p-8 max-w-7xl w-full mx-auto min-w-0">
+        @switch (activePage()) {
+          @case ('profile') { <app-profile /> }
+          @case ('dashboard') { <app-dashboard /> }
+          @case ('events') { <app-calendar-page /> }
+          @case ('gamification') { <app-gamification-page /> }
+          @case ('leaderboard') { <app-leaderboard-page /> }
+          @case ('talent-placement') { <app-talent-placement-page /> }
+          @case ('members') { <app-members /> }
+          @case ('member-register') { <app-member-register-page /> }
+          @case ('member-kta') { <app-member-kta-page /> }
+          @case ('member-import') { <app-member-import-page /> }
+          @case ('finance') { <app-finance /> }
+          @case ('finance-entry') { <app-finance-entry-page /> }
+          @case ('finance-receipts') { <app-finance-receipts-page /> }
+          @case ('finance-qris') { <app-finance-qris-page /> }
+          @case ('finance-reports') { <app-finance-reports-page /> }
+          @case ('member-dues-recap') { <app-member-dues-recap-page /> }
+          @case ('forum') { <app-forum /> }
+          @case ('forum-new') { <app-forum-new-page /> }
+          @case ('forum-thread') { <app-forum-thread-page /> }
+          @case ('analytics') { <app-analytics /> }
+          @case ('roles') { <app-roles /> }
+          @case ('settings') { <app-community-settings /> }
+          @case ('security') { <app-security-2fa /> }
+          @case ('integrations') { <app-integrations /> }
+          @case ('api-sandbox') { <app-api-sandbox /> }
+          @case ('api-docs') { <app-api-docs-page /> }
+          @case ('cloud-backup') { <app-cloud-backup-page /> }
+        }
+      </main>
+
+      <app-notification-drawer [isOpen]="isNotificationOpen()" (drawerClose)="isNotificationOpen.set(false)" />
+    </div>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-2 py-1 flex items-center justify-around">
+      <button type="button" (click)="switchTab('dashboard')" [class]="activePage() === 'dashboard' ? 'text-indigo-600 font-bold' : 'text-slate-500'" class="flex flex-col items-center gap-0.5 text-[10px] py-1 px-2 min-w-[44px]">
+        <mat-icon class="text-xl">grid_view</mat-icon>
+        <span>Ringkas</span>
+      </button>
+      <button type="button" (click)="switchTab('events')" [class]="activePage() === 'events' ? 'text-indigo-600 font-bold' : 'text-slate-500'" class="flex flex-col items-center gap-0.5 text-[10px] py-1 px-2 min-w-[44px]">
+        <mat-icon class="text-xl">event</mat-icon>
+        <span>Agenda</span>
+      </button>
+      <button type="button" (click)="switchTab('gamification')" [class]="activePage() === 'gamification' ? 'text-indigo-600 font-bold' : 'text-slate-500'" class="flex flex-col items-center gap-0.5 text-[10px] py-1 px-2 min-w-[44px]">
+        <mat-icon class="text-xl">stars</mat-icon>
+        <span>Poin XP</span>
+      </button>
+      <button type="button" (click)="switchTab('finance')" [class]="activePage() === 'finance' ? 'text-indigo-600 font-bold' : 'text-slate-500'" class="flex flex-col items-center gap-0.5 text-[10px] py-1 px-2 min-w-[44px]">
+        <mat-icon class="text-xl">account_balance_wallet</mat-icon>
+        <span>Kas</span>
+      </button>
+      <button type="button" (click)="isMobileNavOpen.set(true)" class="flex flex-col items-center gap-0.5 text-[10px] py-1 px-2 min-w-[44px] text-slate-500">
+        <mat-icon class="text-xl">menu</mat-icon>
+        <span>Menu</span>
+      </button>
+    </div>
+  </div>
+}
